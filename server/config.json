@@ -1,8 +1,8 @@
 {
-    "PORT": 5020,
+    "PORT": 5000,
     "DEBUG": true,
-    "TIME_MINIMUM": 30,
-    "TIME_RANGE": 50,
+    "TIME_MINIMUM": 1,
+    "TIME_RANGE": 2,
 
     "ERROR_FREQUENCY": 1,
     "ERROR_PROBABILITY": 0.01,
