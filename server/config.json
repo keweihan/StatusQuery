@@ -1,0 +1,10 @@
+{
+    "PORT": 5020,
+    "DEBUG": true,
+    "TIME_MINIMUM": 30,
+    "TIME_RANGE": 50,
+
+    "ERROR_FREQUENCY": 1,
+    "ERROR_PROBABILITY": 0.01,
+    "SEED": 42
+}
