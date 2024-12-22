@@ -25,26 +25,26 @@ Install `requirements.txt` dependencies. Run integration tests with the followin
 ```
 python -m unittest tests/test_integration.py
 ```
-Expect output:
+Example output:
 ```
-----------------------------------------------------------------------
-Ran 1 test in 20.194s
+usr@computer % python -m unittest tests/test_integration.py
 
-OK
-(base) usr % python -m unittest tests/test_integration.py
 [TEST]: Server started
 [TEST]: Client running
 
 ========= Client Logs =========
- Job started successfully: {'result': 'success'}
-Pending... {'result': 'pending'}. Retrying
-Pending... {'result': 'pending'}. Retrying
-Pending... {'result': 'pending'}. Retrying
-Pending... {'result': 'pending'}. Retrying
-3.667478561401367
-Wait finished with status: Status.COMPLETED
-Stats: 1 jobs, 5 requests, 3.6674854755 seconds of lag between server completion and wait_complete
 
+[StatusClient]  Job started successfully
+[StatusClient]  Checked status and got response: {'result': 'pending'}. Retrying
+[StatusClient]  Checked status and got response: {'result': 'pending'}. Retrying
+[StatusClient]  Checked status and got response: {'result': 'pending'}. Retrying
+[StatusClient]  Checked status and got response: {'result': 'pending'}. Retrying
+[StatusClient]  Job completed. Lag: 3.66 seconds, Total Jobs: 1, Total Requests: 5
+Wait finished with status: Status.COMPLETED
+Client Performance Statistics:
+  Total Jobs Submitted : 1
+  Total Requests Made  : 5
+  Total Lag (seconds)  : 3.6570115089
 .
 ========= Server Logs (stdout) =========
   * Serving Flask app 'server'
@@ -58,16 +58,16 @@ Press CTRL+C to quit
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 145-047-763
-127.0.0.1 - - [21/Dec/2024 19:55:15] "POST /start HTTP/1.1" 202 -
-127.0.0.1 - - [21/Dec/2024 19:55:15] "GET /status HTTP/1.1" 202 -
-127.0.0.1 - - [21/Dec/2024 19:55:16] "GET /status HTTP/1.1" 202 -
-127.0.0.1 - - [21/Dec/2024 19:55:18] "GET /status HTTP/1.1" 202 -
-127.0.0.1 - - [21/Dec/2024 19:55:22] "GET /status HTTP/1.1" 202 -
-127.0.0.1 - - [21/Dec/2024 19:55:30] "GET /status HTTP/1.1" 200 -
+127.0.0.1 - - [21/Dec/2024 20:35:01] "POST /start HTTP/1.1" 202 -
+127.0.0.1 - - [21/Dec/2024 20:35:01] "GET /status HTTP/1.1" 202 -
+127.0.0.1 - - [21/Dec/2024 20:35:02] "GET /status HTTP/1.1" 202 -
+127.0.0.1 - - [21/Dec/2024 20:35:04] "GET /status HTTP/1.1" 202 -
+127.0.0.1 - - [21/Dec/2024 20:35:08] "GET /status HTTP/1.1" 202 -
+127.0.0.1 - - [21/Dec/2024 20:35:16] "GET /status HTTP/1.1" 200 -
 
 
 ----------------------------------------------------------------------
-Ran 1 test in 16.192s
+Ran 1 test in 16.077s
 
 OK
 ```
