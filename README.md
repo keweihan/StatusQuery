@@ -1,4 +1,4 @@
-# Server-Query
+# StatusQuery
 A simple client request library. Given a basic server with endpoint that returns the status only with minimal additional functionality, this client library provides methods to query the status.
 
 ## Getting Started
