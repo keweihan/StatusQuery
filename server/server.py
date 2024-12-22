@@ -56,8 +56,10 @@ def get_status():
     print(f"job_duration: {job_duration_real}")
     print(f"time since start job: {time.time() - start_time}")
     if start_time == -1:
+        print("Job not started")
         return jsonify({"result": "error"}), 404
     elif has_errored:
+        print("Job errored")
         return jsonify({"result": "error"}), 500
     elif time.time() - start_time < job_duration_real:
         return jsonify({"result": "pending"}), 202

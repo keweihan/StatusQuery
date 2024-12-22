@@ -15,6 +15,15 @@ class Status(Enum):
 
 class StatusClient:
     class Stats:
+        """
+        Stores statistics on client performance.
+
+        Attributes:
+            total_jobs (int): The total number of jobs submitted.
+            total_requests (int): The total number of requests made to the server.
+            total_lag (float): The total time (in seconds) of lag between server completion and wait_complete.
+        """
+
         def __init__(self):
             self.total_jobs: int = 0
             self.total_requests: int = 0
@@ -89,6 +98,9 @@ class StatusClient:
             args (WaitArgs): Configuration parameters for waiting.
         Returns:
             Status: The final status on return.
+                    STATUS.COMPLETED if job completed successfully,
+                    STATUS.ERROR if exceeded max retries,
+                    STATUS.TIMEOUT if exceeded max time.
         """
         if args is None:
             args = StatusClient.WaitArgs()
@@ -96,20 +108,27 @@ class StatusClient:
         start_time = time.time()
         interval = args.check_interval  # Start with 1 second
         tries = 0
-        while tries < args.retry and time.time() - start_time < args.timeout:
-            response = self._request_video()
-            result = response["result"]
-            print(response)
-            if result == "completed":
-                print(time.time() - response["_completion_time"])
-                self.stats.total_lag += time.time() - response["_completion_time"]
-                return Status.COMPLETED
-            elif result == "error":
-                tries += 1
-            time.sleep(interval)
+        while tries < args.retry:
+            while time.time() - start_time < args.timeout:
+                response = self._request_video()
+                result = response["result"]
+                if result == "completed":
+                    print(time.time() - response["_completion_time"])
+                    self.stats.total_lag += time.time() - response["_completion_time"]
+                    return Status.COMPLETED
+                elif result == "error":
+                    tries += 1
+                    break
+                time.sleep(interval)
 
-            if args.backoff:
-                interval = min(interval * 2, 10)
+                print(f"Pending... {response}. Retrying")
+                if args.backoff:
+                    interval = min(interval * 2, 10)
+
+            if tries < args.retry:
+                print(f"Got error... {response}. Retrying")
+                interval = args.check_interval
+                self.submit_job()
 
         if time.time() - start_time >= args.timeout:
             return Status.TIMEOUT
@@ -133,6 +152,6 @@ if __name__ == "__main__":
     # Start the job
     client = StatusClient()
     client.submit_job()
-    client.wait_complete(StatusClient.WaitArgs())
-    client.get_status()
+    end_status = client.wait_complete(StatusClient.WaitArgs())
+    print(f"Wait finished with status: {end_status}")
     print(client.stats)
