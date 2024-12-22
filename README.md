@@ -1,7 +1,18 @@
 # Server-Query
 A simple client request library. Given a basic server with endpoint that returns the status only with minimal additional functionality, this client library provides methods to query the status.
 
-# Library Usage
+## Getting Started
+To run an example manually, start up the server 
+```
+python server/server.py
+```
+Then run main in the client library script in a separate terminal
+```
+python server/client.py
+```
+
+
+## Library Usage
 A simple example usage will look something like this
 ```python
 # Create client object
@@ -14,13 +25,13 @@ client.submit_job()
 args = StatusClient.WaitArgs()
 end_status = client.wait_complete()
 
-# ----- post completion logic -----
+# ----- post completion logic (i.e. retrieve video data) -----
 ```
 The user must create a client and then submit a job. The library provides the user with a method `wait_complete()` for waiting until a submitted job has completed. The waiting policy can be customized with `WaitArgs` to either use a backoff strategy to minimize request count or use a constant check strategy to minimize the lag between server completion and `wait_complete()` unblocking. One may be more appropriate than the other depending on use case. 
 
 The user may also choose to use `client.get_status()` to get the immediate status of the job should they wish to implement their own waiting, though this is not recommended. 
 
-# Testing
+## Testing
 Install `requirements.txt` dependencies. Run integration tests with the following
 ```
 python -m unittest tests/test_integration.py
